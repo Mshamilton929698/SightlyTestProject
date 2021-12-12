@@ -3,6 +3,9 @@
 This is a C# Selenium project. The test file will navigate a stagning website to download a report and then compare the data to a master file.
 The project was created using an NUnit Template.
 
+This project just contains a single test case. If this project was intended to run a suite of tests, a Base Class and helper files would need to be added so shared methods 
+and classes would not need to be added to every test file. 
+
 ### Target Framework
 
 - netcoreapp3.1
