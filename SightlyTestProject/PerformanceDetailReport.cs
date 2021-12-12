@@ -21,6 +21,7 @@ namespace SightlyTestProject
         string fileDownLoad = @"C:\Downloads\Tests";
         string user = "qa-tester@qa-test.com";
         string password = "sightlyqatest";
+
         
         [SetUp]
         public void Setup()
@@ -51,9 +52,8 @@ namespace SightlyTestProject
             wait10.Until(driver => driver.FindElement(By.Id("header-reports")));
             driver.FindElement(By.Id("header-reports")).Click();
 
-            // Click on All to Display all reports
+            // Click on All to Display all reports; Added a 500ms sleep as neither an implicit wait or explicit wait would allow for the XPath to be found
             Thread.Sleep(500);
-            //wait10.Until(driver => driver.FindElement(By.ClassName("table-header")));
             driver.FindElement(By.XPath("//div[3]/a")).Click();
 
             // Click on the checkbox for Ad Group Mapping - TEST IOG
@@ -76,7 +76,6 @@ namespace SightlyTestProject
             driver.FindElement(By.ClassName("run-report-button")).Click();
 
             // Wait for file to download
-            //wait10.Until<bool>(x => fileExists = File.Exists(expectedFilePath));
             Thread.Sleep(2000);
 
             // Get the file name of the most recent file in the download folder
@@ -101,31 +100,28 @@ namespace SightlyTestProject
             Console.Write(masterFilePath);
             
             // Create a list of the data in the downloaded file
-
             var list1 = new List<string>();
             using (var wbook1 = new XLWorkbook(expectedFilePath))
             {
                 var ws1 = wbook1.Worksheet(1);
-                list1 = (List<string>)ws1.Range("A5:S21")
+                list1 = (List<string>)ws1.Range("A5:S100")
                     .CellsUsed()
                     .Select(c => c.Value.ToString())
                     .ToList();
             }
 
-            // Create a list for the data in the master file
-
+            // Create a list for the data in the master file for only the column names and the corresponding data
             var list2 = new List<string>();
-            using (var wbook1 = new XLWorkbook(masterFilePath))
+            using (var wbook2 = new XLWorkbook(masterFilePath))
             {
-                var ws1 = wbook1.Worksheet(1);
-                list2 = (List<string>)ws1.Range("A5:S21")
+                var ws2 = wbook2.Worksheet(1);
+                list2 = (List<string>)ws2.Range("A5:S100")
                     .CellsUsed()
                     .Select(c => c.Value.ToString())
                     .ToList();
             }
 
-            // Check that the data in the lists are = and delete downloaded report if True, else fail Test 
-            // and leave the file for review
+            // Check that the data in the lists are equal and in the proper sequence. Delete downloaded report if True.
             bool check = list1.SequenceEqual(list2);
             if (check is true)
             {
