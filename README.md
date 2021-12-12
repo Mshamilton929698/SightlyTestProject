@@ -1,6 +1,6 @@
 # SightlyTestProject
 
-This is a C# Selenium project. The test file will navigate a stagning website to download a report and then commpare the data to a master file.
+This is a C# Selenium project. The test file will navigate a stagning website to download a report and then compare the data to a master file.
 The project was created using an NUnit Template.
 
 ### Target Framework
